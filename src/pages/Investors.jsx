@@ -51,6 +51,7 @@ const Investors = () => {
         if (rawYear && (rawYear.includes('-') || /^(19|20)\d{2}$/.test(rawYear))) return rawYear;
         const titleMatch = (doc["Document Title"] || "").match(/\b(20\d{2})\b/);
         return titleMatch ? titleMatch[1] : "";
+        return "";
       }).filter(year => year !== "")
     )
   ).sort((a, b) => b.localeCompare(a));
@@ -83,7 +84,6 @@ const Investors = () => {
   const currentItems = filteredDocuments.slice(indexOfFirstItem, indexOfLastItem);
   const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage) || 1;
 
-  // 🔄 UPDATED PDF LOGIC WITH CUSTOM FRIENDLY LOADING TEXT
   const handleOpenPdf = async (path, docTitle) => {
     if (!path) return alert("File path khali hai.");
     let finalUrl = path.trim();
@@ -98,7 +98,6 @@ const Investors = () => {
     const pdfViewerWindow = window.open("", "_blank");
     if (!pdfViewerWindow) return alert("Please allow popups to view corporate documents.");
 
-    // Injecting a clean loader screen with updated text
     pdfViewerWindow.document.write(`
       <html>
         <head>
@@ -126,10 +125,8 @@ const Investors = () => {
       const fileBlob = await response.blob();
       const directBlobDataUrl = URL.createObjectURL(fileBlob);
       
-      // Update Tab Title to actual report name
       pdfViewerWindow.document.title = docTitle || "Corporate Report";
       
-      // Hide the loader cleanly
       const loaderDiv = pdfViewerWindow.document.getElementById("loader");
       if (loaderDiv) loaderDiv.style.display = "none";
 
@@ -143,7 +140,6 @@ const Investors = () => {
       pdfObject.appendChild(pdfEmbed);
       pdfViewerWindow.document.body.appendChild(pdfObject);
     } catch (error) {
-      // Fallback in case of CORS or connectivity block
       pdfViewerWindow.location.href = finalUrl;
     }
   };
@@ -166,6 +162,25 @@ const Investors = () => {
         .repo-tab-btn:hover { color: ${BRAND_YELLOWISH} !important; }
       `}} />
 
+      {/* ⚠️ NOTIFICATION / UNDER DEPLOYMENT BANNER */}
+      <div style={{
+        backgroundColor: '#fffbeb',
+        color: '#b45309',
+        padding: '12px 20px',
+        textAlign: 'center',
+        fontSize: '14px',
+        fontWeight: '500',
+        borderBottom: '1px solid #fde68a',
+        fontFamily: "'Inter', sans-serif",
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '8px'
+      }}>
+        <span>⚠️</span>
+        <span><strong>Notice:</strong> This website is currently under deployment phase. Some links or dashboard components may change during live setup synchronization.</span>
+      </div>
+
       {/* 🎬 DYNAMIC BANNER BLOCK */}
       <div style={{ 
         width: '100%', 
@@ -179,7 +194,6 @@ const Investors = () => {
         backgroundColor: '#f1f5f9'
       }}>
         
-        {/* 🎥 BRIGHT ORIGINAL VIDEO PLAYBACK LAYER */}
         <video 
           autoPlay 
           loop 
@@ -199,7 +213,6 @@ const Investors = () => {
           Your browser does not support the video tag.
         </video>
 
-        {/* 🌗 ULTRA-LIGHT SMART TINT */}
         <div style={{
           position: 'absolute',
           top: 0, left: 0, width: '100%', height: '100%',
@@ -207,7 +220,6 @@ const Investors = () => {
           zIndex: 2
         }} />
 
-        {/* 📝 CRISP READABLE TEXT FRAME CONTAINER */}
         <div style={{ 
           position: 'relative', 
           zIndex: 3, 
