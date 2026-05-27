@@ -25,7 +25,7 @@ const AdminDashboard = () => {
   // 1️⃣ Fetch Function
   const fetchDocuments = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/documents'); 
+      const response = await fetch('https://gujarat-apollo-backend-v1.onrender.com'); 
       if (response.ok) {
         const data = await response.json();
         setAllDocs(data);
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
     formData.append('file', file); 
 
     try {
-      const response = await fetch('http://localhost:5000/api/documents', {
+      const response = await fetch('https://gujarat-apollo-backend-v1.onrender.com', {
         method: 'POST',
         body: formData, 
       });
@@ -88,7 +88,7 @@ const openEditModal = (doc) => {
   const handleEditSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/api/documents/${currentDocId}`, {
+      const response = await fetch(`https://gujarat-apollo-backend-v1.onrender.com/api/documents/${currentDocId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -115,7 +115,7 @@ const openEditModal = (doc) => {
   const handleDeleteDoc = async (id) => {
     if (window.confirm("Kya aap sach me is report ko delete karna chahte hain?")) {
       try {
-        const response = await fetch(`http://localhost:5000/api/documents/${id}`, {
+        const response = await fetch(`https://gujarat-apollo-backend-v1.onrender.com/api/documents/${id}`, {
           method: 'DELETE'
         });
         if (response.ok) {
