@@ -1,185 +1,98 @@
 import React from 'react';
+import miningImg from '../assets/mine.jpg';
+import roadImg from '../assets/rode.jpg';
+import infraImg from '../assets/infra.jpg';
+import companyProfileImg from '../assets/Company.jpg'; 
 
 const HomeSections = () => {
   const sectors = [
     {
       title: "MINING & QUARRY",
       desc: "Heavy-duty aggregate processing units and jaw-crusher setups engineered for continuous high-throughput extraction.",
-      img: "https://images.unsplash.com/photo-1578328819058-b69f3a3b0f6b?q=80&w=800&auto=format&fit=crop",
+      img: miningImg,
     },
     {
       title: "ROAD CONSTRUCTION",
-      desc: "Precision asphalt batch mix plants and paver technologies built for expanding high-speed national highway infrastructure.",
-      img: "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?q=80&w=800&auto=format&fit=crop",
+      desc: "Precision asphalt batch mix plants and paver technologies built for expanding high speed national highway infrastructure.",
+      img: roadImg,
     },
     {
       title: "INFRASTRUCTURE PROJECTS",
       desc: "Custom ready-mix solutions, concrete production plants, and grading setups optimized for massive dam and marine construction.",
-      img: "https://images.unsplash.com/photo-1590069261209-f8e9b8642343?q=80&w=800&auto=format&fit=crop",
-    }
+      img: infraImg,
+    },
   ];
 
   return (
-    <div style={{ width: '100%', fontFamily: '"Segoe UI", Roboto, Arial, sans-serif', backgroundColor: '#ffffff', overflow: 'hidden' }}>
+    <div style={{ width: '100%', fontFamily: '"Segoe UI", Roboto, Arial, sans-serif', backgroundColor: '#ffffff', padding: '20px 0' }}>
       
-      {/* ==================== SECTION 1: DYNAMIC WELCOME HERO SPLIT ==================== */}
-      <section style={{ 
-        display: 'flex', 
-        width: '100%', 
-        minHeight: '520px', 
-        flexWrap: 'wrap-reverse', 
-        backgroundColor: '#f8fafc',
-        borderBottom: '4px solid #0c2356'
-      }}>
-        {/* Left Rich Text Content */}
-        <div style={{ 
-          flex: '1', 
-          minWidth: '320px', 
-          padding: '60px 6%', 
-          display: 'flex', 
-          flexDirection: 'column', 
-          justifyContent: 'center',
-          backgroundColor: '#ffffff'
-        }}>
-          <span style={{ color: '#ffb800', fontWeight: '800', fontSize: '13px', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: '10px', display: 'block' }}>
-            Corporate Profile
-          </span>
-          <h1 style={{ 
-            color: '#0c2356', 
-            fontSize: '36px', 
-            fontWeight: '800', 
-            lineHeight: '1.25',
-            margin: '0 0 20px 0',
-            letterSpacing: '-0.5px'
-          }}>
-            GUJARAT APOLLO INDUSTRIES LIMITED
-          </h1>
-          <div style={{ width: '60px', height: '4px', backgroundColor: '#0c2356', marginBottom: '25px' }} />
-          
-          <p style={{ color: '#4a5568', fontSize: '15.5px', lineHeight: '1.75', margin: '0 0 18px 0', textAlign: 'justify' }}>
-            Welcome to India's well respected manufacturer of high quality crushing and screening equipment. 
-            Gujarat Apollo Industries Ltd. hails from Mehsana district of Gujarat and is the flagship company of Apollo group of Industries.
+      {/* 🏛️ About Us Section */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto 30px auto', padding: '0 20px', display: 'flex', gap: '40px', alignItems: 'center', flexWrap: 'wrap' }}>
+        {/* Left Side: About Text */}
+        <div style={{ flex: '1.2', minWidth: '320px' }}>
+          <p style={{ color: '#ff6b00', fontSize: '13px', fontWeight: '700', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '6px' }}>
+            Who We Are
           </p>
-          <p style={{ color: '#4a5568', fontSize: '15.5px', lineHeight: '1.75', margin: '0 0 30px 0', textAlign: 'justify' }}>
-            Established around 50 years ago, Apollo group has catered the Earthmoving industry in India and abroad with its world class after sales services. 
-            Our track record is a true testimony to our slogan: <strong style={{ color: '#0c2356' }}>Your dependable partner.</strong>
-          </p>
-          
-          <button style={{
-            backgroundColor: '#e67e22',
-            color: '#ffffff',
-            border: 'none',
-            padding: '14px 32px',
-            fontSize: '14px',
-            fontWeight: '700',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px',
-            width: 'fit-content',
-            cursor: 'pointer',
-            borderRadius: '4px',
-            boxShadow: '0 4px 12px rgba(230, 126, 34, 0.25)',
-            transition: 'background-color 0.2s'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#d35400'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#e67e22'}
-          >
-            Read More
-          </button>
-        </div>
-
-        {/* Right Heavy Industry Image Block */}
-        <div style={{ 
-          flex: '1', 
-          minWidth: '320px', 
-          backgroundImage: `url('https://images.unsplash.com/photo-1581092160607-ee22621dd758?q=80&w=1000&auto=format&fit=crop')`, 
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          minHeight: '400px',
-          borderLeft: '1px solid #e2e8f0'
-        }} />
-      </section>
-
-      {/* ==================== SECTION 2: HIGH-END INDUSTRIAL SECTORS GRID ==================== */}
-      <section style={{ padding: '90px 6%', backgroundColor: '#f1f5f9' }}>
-        <div style={{ textAlign: 'center', marginBottom: '55px' }}>
-          <h2 style={{ 
-            color: '#0c2356', 
-            fontSize: '32px', 
-            fontWeight: '800', 
-            margin: '0 0 10px 0',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px'
-          }}>
-            Sectors We Serve
+          <h2 style={{ fontSize: '32px', fontWeight: '800', color: '#012147', margin: '0 0 12px 0' }}>
+            ABOUT GUJARAT APOLLO
           </h2>
-          <p style={{ color: '#64748b', fontSize: '16px', margin: 0 }}>
-            Engineered systems designed to withstand the toughest industrial operational demands.
+          <div style={{ width: '50px', height: '3px', backgroundColor: '#ff6b00', marginBottom: '15px' }}></div>
+          <p style={{ color: '#475569', fontSize: '15px', lineHeight: '1.6', margin: '0 0 12px 0' }}>
+            With decades of engineering excellence, Gujarat Apollo Industries specializes in manufacturing world-class crushing, screening, and road construction equipment. We empower global infrastructure projects with rugged, high-efficiency machinery designed for the toughest terrains.
+          </p>
+          <p style={{ color: '#64748b', fontSize: '14px', lineHeight: '1.6', margin: '0' }}>
+            Our commitment to innovation and reliable service ensures maximum uptime and unparalleled productivity for our partners worldwide.
           </p>
         </div>
 
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', 
-          gap: '30px', 
-          maxWidth: '1200px',
-          margin: '0 auto'
-        }}>
-          {sectors.map((sector, idx) => (
-            <div 
-              key={idx} 
-              style={{
-                backgroundColor: '#ffffff',
-                borderRadius: '8px',
-                overflow: 'hidden',
-                boxShadow: '0 4px 20px rgba(0,0,0,0.05)',
-                borderBottom: '4px solid transparent',
-                transition: 'all 0.3s ease',
-                display: 'flex',
-                flexDirection: 'column'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'translateY(-5px)';
-                e.currentTarget.style.borderBottom = '4px solid #ffb800';
-                e.currentTarget.style.boxShadow = '0 12px 30px rgba(12, 35, 86, 0.15)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.borderBottom = '4px solid transparent';
-                e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.05)';
-              }}
-            >
-              <div style={{ 
-                width: '100%', 
-                height: '220px', 
-                backgroundImage: `url(${sector.img})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center'
-              }} />
-
-              <div style={{ padding: '30px', flex: '1', display: 'flex', flexDirection: 'column' }}>
-                <h3 style={{ 
-                  color: '#0c2356', 
-                  fontSize: '20px', 
-                  fontWeight: '700', 
-                  margin: '0 0 12px 0',
-                  letterSpacing: '0.5px'
-                }}>
-                  {sector.title}
-                </h3>
-                <p style={{ 
-                  color: '#475569', 
-                  fontSize: '14.5px', 
-                  lineHeight: '1.6', 
-                  margin: 0,
-                  textAlign: 'justify'
-                }}>
-                  {sector.desc}
-                </p>
-              </div>
-            </div>
-          ))}
+        {/* Right Side: Image with FIXED RATIO (Ab nahi phategi) */}
+        <div style={{ flex: '1', minWidth: '320px', display: 'flex', justifyContent: 'center' }}>
+          <img 
+            src={companyProfileImg} 
+            alt="Gujarat Apollo Company Profile" 
+            style={{ width: '100%', maxHeight: '350px', objectFit: 'contain', borderRadius: '6px' }} 
+          />
         </div>
-      </section>
+      </div>
+
+      {/* Tight Separator Line */}
+      <hr style={{ maxWidth: '1200px', margin: '0 auto 30px auto', border: '0', borderTop: '1px solid #e2e8f0' }} />
+
+      {/* 🪨 Sectors We Serve Header */}
+      <div style={{ maxWidth: '1200px', margin: '0 auto 25px auto', padding: '0 20px' }}>
+        <h2 style={{ fontSize: '26px', fontWeight: '800', color: '#012147', textTransform: 'uppercase', margin: '0 0 8px 0', letterSpacing: '0.5px' }}>
+          Sectors We Serve
+        </h2>
+        <div style={{ width: '40px', height: '3px', backgroundColor: '#ff6b00' }}></div>
+      </div>
+
+      {/* Simple Side-by-Side Grid Layout */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
+        {sectors.map((sector, index) => (
+          <div key={index} style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'transparent' }}>
+            
+            {/* Clean Image Section */}
+            <div style={{ height: '210px', width: '100%', overflow: 'hidden', borderRadius: '6px', marginBottom: '15px' }}>
+              <img 
+                src={sector.img} 
+                alt={sector.title} 
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+              />
+            </div>
+
+            {/* Content Section */}
+            <div style={{ padding: '0 5px' }}>
+              <h3 style={{ fontSize: '17px', fontWeight: '700', color: '#012147', margin: '0 0 8px 0', letterSpacing: '-0.3px' }}>
+                {sector.title}
+              </h3>
+              <p style={{ color: '#555555', fontSize: '14px', lineHeight: '1.6', margin: '0' }}>
+                {sector.desc}
+              </p>
+            </div>
+
+          </div>
+        ))}
+      </div>
 
     </div>
   );
