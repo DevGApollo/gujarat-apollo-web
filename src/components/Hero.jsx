@@ -9,7 +9,7 @@ const Hero = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/products'); 
+        const response = await fetch('https://gujarat-apollo-backend-v1.onrender.com/api/products'); 
         const data = await response.json();
         if (data && data.length > 0) {
           setProducts(data);
