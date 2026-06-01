@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import miningImg from '../assets/mine.jpg';
 import roadImg from '../assets/rode.jpg';
 import infraImg from '../assets/infra.jpg';
+// Live server (Netlify) par photo chalane ka 100% sahi tareeqa
+import companyImg from '../assets/Company.jpg'; 
 
 const HomeSections = () => {
   const [hoveredAbout, setHoveredAbout] = useState(false);
@@ -28,7 +30,7 @@ const HomeSections = () => {
   return (
     <div style={{ width: '100%', fontFamily: '"Segoe UI", Roboto, Arial, sans-serif', backgroundColor: '#ffffff', padding: '10px 0' }}>
       
-      {/* 🏛️ About Us Section (Left Text, Right Image) */}
+      {/* 🏛️ About Us Section */}
       <div style={{ maxWidth: '1200px', margin: '0 auto 20px auto', padding: '0 20px', display: 'flex', gap: '40px', alignItems: 'center', flexWrap: 'wrap' }}>
         
         {/* Left Side: About Text */}
@@ -48,14 +50,14 @@ const HomeSections = () => {
           </p>
         </div>
 
-        {/* Right Side: Image without Import (Using your file name 'Company.jpg') */}
+        {/* Right Side: Image using the bundled variable */}
         <div 
           style={{ flex: '1', minWidth: '320px', height: '300px', overflow: 'hidden', borderRadius: '6px' }}
           onMouseEnter={() => setHoveredAbout(true)}
           onMouseLeave={() => setHoveredAbout(false)}
         >
           <img 
-            src="/src/assets/Company.jpg" 
+            src={companyImg} 
             alt="Gujarat Apollo Company Profile" 
             style={{ 
               width: '100%', 
@@ -65,11 +67,6 @@ const HomeSections = () => {
               transition: 'transform 0.4s ease',
               transform: hoveredAbout ? 'scale(1.05)' : 'scale(1)'
             }} 
-            onError={(e) => {
-              // Agar extention capital '.JPG' ya '.png' ho toh automatic handle karne ke liye fallback
-              e.target.onerror = null;
-              e.target.src = "/src/assets/Company.JPG";
-            }}
           />
         </div>
       </div>
