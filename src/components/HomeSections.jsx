@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import miningImg from '../assets/mine.jpg';
 import roadImg from '../assets/rode.jpg';
 import infraImg from '../assets/infra.jpg';
-import companyProfileImg from '../assets/Company.jpg'; 
 
 const HomeSections = () => {
+  // Images ke hover state ko track karne ke liye states
+  const [hoveredAbout, setHoveredAbout] = useState(false);
+  const [hoveredSector, setHoveredSector] = useState(null);
+
   const sectors = [
     {
       title: "MINING & QUARRY",
@@ -26,7 +29,7 @@ const HomeSections = () => {
   return (
     <div style={{ width: '100%', fontFamily: '"Segoe UI", Roboto, Arial, sans-serif', backgroundColor: '#ffffff', padding: '20px 0' }}>
       
-      {/* 🏛️ About Us Section */}
+      {/* 🏛️ About Us Section (Left Text, Right Image) */}
       <div style={{ maxWidth: '1200px', margin: '0 auto 30px auto', padding: '0 20px', display: 'flex', gap: '40px', alignItems: 'center', flexWrap: 'wrap' }}>
         {/* Left Side: About Text */}
         <div style={{ flex: '1.2', minWidth: '320px' }}>
@@ -45,12 +48,26 @@ const HomeSections = () => {
           </p>
         </div>
 
-        {/* Right Side: Image with FIXED RATIO (Ab nahi phategi) */}
-        <div style={{ flex: '1', minWidth: '320px', display: 'flex', justifyContent: 'center' }}>
+        {/* Right Side: Image with HOVER Effect */}
+        <div 
+          style={{ flex: '1', minWidth: '320px', display: 'flex', justifyContent: 'center', overflow: 'hidden', borderRadius: '6px' }}
+          onMouseEnter={() => setHoveredAbout(true)}
+          onMouseLeave={() => setHoveredAbout(false)}
+        >
           <img 
-            src={companyProfileImg} 
+            src="/src/assets/Company-Profile.jpg" 
             alt="Gujarat Apollo Company Profile" 
-            style={{ width: '100%', maxHeight: '350px', objectFit: 'contain', borderRadius: '6px' }} 
+            style={{ 
+              width: '100%', 
+              maxHeight: '320px', 
+              objectFit: 'contain', 
+              borderRadius: '6px',
+              transition: 'transform 0.4s ease',
+              transform: hoveredAbout ? 'scale(1.04)' : 'scale(1)'
+            }} 
+            onError={(e) => {
+              e.target.src = "/src/assets/Company-Profile.png"; 
+            }}
           />
         </div>
       </div>
@@ -66,21 +83,31 @@ const HomeSections = () => {
         <div style={{ width: '40px', height: '3px', backgroundColor: '#ff6b00' }}></div>
       </div>
 
-      {/* Simple Side-by-Side Grid Layout */}
+      {/* Simple Side-by-Side Grid Layout (With HOVER on Images) */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '30px', maxWidth: '1200px', margin: '0 auto', padding: '0 20px' }}>
         {sectors.map((sector, index) => (
           <div key={index} style={{ display: 'flex', flexDirection: 'column', backgroundColor: 'transparent' }}>
             
-            {/* Clean Image Section */}
-            <div style={{ height: '210px', width: '100%', overflow: 'hidden', borderRadius: '6px', marginBottom: '15px' }}>
+            {/* Clean Image Section with overflow: hidden for smooth zoom */}
+            <div 
+              style={{ height: '210px', width: '100%', overflow: 'hidden', borderRadius: '6px', marginBottom: '15px' }}
+              onMouseEnter={() => setHoveredSector(index)}
+              onMouseLeave={() => setHoveredSector(null)}
+            >
               <img 
                 src={sector.img} 
                 alt={sector.title} 
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                style={{ 
+                  width: '100%', 
+                  height: '100%', 
+                  objectFit: 'cover',
+                  transition: 'transform 0.4s ease',
+                  transform: hoveredSector === index ? 'scale(1.06)' : 'scale(1)'
+                }} 
               />
             </div>
 
-            {/* Content Section */}
+            {/* Content Section Right Under the Image */}
             <div style={{ padding: '0 5px' }}>
               <h3 style={{ fontSize: '17px', fontWeight: '700', color: '#012147', margin: '0 0 8px 0', letterSpacing: '-0.3px' }}>
                 {sector.title}
