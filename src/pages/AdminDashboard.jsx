@@ -22,10 +22,10 @@ const AdminDashboard = () => {
   const [allDocs, setAllDocs] = useState([]);
   const [isUploading, setIsUploading] = useState(false);
 
-  // 1️⃣ Fetch Function
+  // 1️⃣ Fetch Function (FIXED: Added /api/documents)
   const fetchDocuments = async () => {
     try {
-      const response = await fetch('https://gujarat-apollo-backend-v1.onrender.com'); 
+      const response = await fetch('https://gujarat-apollo-backend-v1.onrender.com/api/documents'); 
       if (response.ok) {
         const data = await response.json();
         setAllDocs(data);
@@ -39,7 +39,7 @@ const AdminDashboard = () => {
     fetchDocuments();
   }, []);
 
-  // 2️⃣ Upload Handler (POST)
+  // 2️⃣ Upload Handler (POST) (FIXED: Added /api/documents)
   const handleDocSubmit = async (e) => {
     e.preventDefault();
     if (!file) {
@@ -56,7 +56,7 @@ const AdminDashboard = () => {
     formData.append('file', file); 
 
     try {
-      const response = await fetch('https://gujarat-apollo-backend-v1.onrender.com', {
+      const response = await fetch('https://gujarat-apollo-backend-v1.onrender.com/api/documents', {
         method: 'POST',
         body: formData, 
       });
@@ -75,15 +75,16 @@ const AdminDashboard = () => {
     }
   };
 
-  // 3️⃣ Open Edit Modal (Purana data pre-fill karne ke liye)
-const openEditModal = (doc) => {
-  setCurrentDocId(doc._id); // 👈 YEH LINE SABSE MAIN HAI, check karo ye likhi hai ya nahi!
-  setEditTitle(doc.title);
-  setEditFinancialYear(doc.financialYear);
-  setEditCategory(doc.category);
-  setEditTimeline(doc.timeline || '');
-  setIsEditing(true);
-};
+  // 3️⃣ Open Edit Modal
+  const openEditModal = (doc) => {
+    setCurrentDocId(doc._id);
+    setEditTitle(doc.title);
+    setEditFinancialYear(doc.financialYear);
+    setEditCategory(doc.category);
+    setEditTimeline(doc.timeline || '');
+    setIsEditing(true);
+  };
+
   // 4️⃣ Update Handler (PUT)
   const handleEditSubmit = async (e) => {
     e.preventDefault();
@@ -102,7 +103,7 @@ const openEditModal = (doc) => {
       if (response.ok) {
         alert("📝 Parameters safely updated inside the cluster!");
         setIsEditing(false);
-        fetchDocuments(); // UI refresh karo
+        fetchDocuments(); 
       } else {
         alert("Update failed!");
       }
@@ -219,19 +220,19 @@ const openEditModal = (doc) => {
                             </span>
                           </td>
                          <td style={{ padding: '12px 10px', textAlign: 'center', display: 'flex', gap: '6px', justifyContent: 'center', alignItems: 'center', height: '50px' }}>
-  {/* 👇 NAYA DOWNLOAD BUTTON */}
-  <a 
-    href={doc.fileUrl?.startsWith('http') ? doc.fileUrl : `https://res.cloudinary.com/YOUR_CLOUD_NAME/image/upload/${doc.fileUrl}`} 
-    target="_blank" 
-    rel="noopener noreferrer"
-    style={{ backgroundColor: '#f0fdf4', color: '#16a34a', textDecoration: 'none', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', display: 'inline-block' }}
-  >
-    View 📂
-  </a>
+                          
+                          <a 
+                            href={doc.fileUrl?.startsWith('http') ? doc.fileUrl : `https://res.cloudinary.com/dfu6qxwst/image/upload/${doc.fileUrl}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            style={{ backgroundColor: '#f0fdf4', color: '#16a34a', textDecoration: 'none', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: '600', display: 'inline-block' }}
+                          >
+                            View 📂
+                          </a>
 
-  <button onClick={() => openEditModal(doc)} style={{ backgroundColor: '#e0f2fe', color: '#0369a1', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}>Edit 📝</button>
-  <button onClick={() => handleDeleteDoc(doc._id)} style={{ backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}>Purge 🛑</button>
-</td>
+                          <button onClick={() => openEditModal(doc)} style={{ backgroundColor: '#e0f2fe', color: '#0369a1', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}>Edit 📝</button>
+                          <button onClick={() => handleDeleteDoc(doc._id)} style={{ backgroundColor: '#fee2e2', color: '#ef4444', border: 'none', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: '600' }}>Purge 🛑</button>
+                        </td>
                         </tr>
                       ))}
                     </tbody>
