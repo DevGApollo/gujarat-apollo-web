@@ -9,11 +9,23 @@ const Investors = () => {
   const [activeTab, setActiveTab] = useState('Earnings'); 
   const [selectedYear, setSelectedYear] = useState('All Years'); 
   const [currentPage, setCurrentPage] = useState(1);
+  
+  // Visaka style Accordion track karne ke liye state
+  const [openSection, setOpenSection] = useState(0); // By default pehla khula rahega
+
   const itemsPerPage = 8; 
 
   const BRAND_YELLOWISH = '#d97706'; 
   const APPSHEET_APP_ID = "9790de03-824c-4084-b8cf-88975e79fd7d";
   const APPSHEET_ACCESS_KEY = "V2-eLu4X-mhLvZ-pX5tS-qQWH6-Fr9XE-EyOSu-0OdDj-aoLtd"; 
+
+  // Wahi original 4 categories, bina kisi faltu extra ke
+  const lodrSections = [
+    { id: 'Earnings', title: "Disclosures Under Regulation 46 of SEBI (LODR), 2015 (Financials)" },
+    { id: 'Annual Reports', title: "Annual Reports & Related Statutory Filings" },
+    { id: 'Shareholding', title: "Shareholding Pattern & Share Capital Details" },
+    { id: 'Governance', title: "Corporate Governance & Board Committees Code" }
+  ];
 
   useEffect(() => {
     const fetchAllData = async () => {
@@ -51,15 +63,14 @@ const Investors = () => {
         if (rawYear && (rawYear.includes('-') || /^(19|20)\d{2}$/.test(rawYear))) return rawYear;
         const titleMatch = (doc["Document Title"] || "").match(/\b(20\d{2})\b/);
         return titleMatch ? titleMatch[1] : "";
-        return "";
       }).filter(year => year !== "")
     )
   ).sort((a, b) => b.localeCompare(a));
 
   const filteredDocuments = documents.filter((doc) => {
     const docCategory = (doc["Category"] || "").toString().trim().toLowerCase();
-    const docYear = (doc["Financial Year"] || "").toString().trim();
     const docTitle = (doc["Document Title"] || "").toString().trim().toLowerCase();
+    const docYear = (doc["Financial Year"] || "").toString().trim();
     const targetTab = activeTab.toLowerCase();
 
     let isMatchingCategory = false;
@@ -144,6 +155,11 @@ const Investors = () => {
     }
   };
 
+  const handleAccordionToggle = (index, tabId) => {
+    setOpenSection(openSection === index ? null : index);
+    setActiveTab(tabId);
+  };
+
   return (
     <>
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" />
@@ -152,89 +168,33 @@ const Investors = () => {
         .premium-animate-container { font-family: 'Inter', sans-serif; animation: apolloFloatUp 0.5s ease forwards; width: 100%; }
         .wow-glow-card { background: #ffffff; padding: 40px; border-radius: 8px; border: 1px solid #e2e8f0; flex: 1; min-width: 320px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); transition: all 0.3s ease; cursor: pointer; }
         .wow-glow-card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.06); border-color: #cbd5e1; }
-        .tcs-grid-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 35px 10px 30px 0px; background: #ffffff; border-bottom: 1px solid #111111; transition: all 0.2s ease; cursor: pointer; }
+        .tcs-grid-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 25px 10px 20px 0px; background: #ffffff; border-bottom: 1px solid #e2e8f0; transition: all 0.2s ease; cursor: pointer; }
         .tcs-grid-item:hover .tcs-grid-arrow { transform: translateX(6px); color: ${BRAND_YELLOWISH}; }
         .tcs-grid-item:hover h4 { color: ${BRAND_YELLOWISH}; }
         .tcs-grid-arrow { color: #0f2963; font-size: 20px; transition: transform 0.25s ease; margin-top: 2px; }
         .nav-btn-layout { padding: 10px 20px; border: 1px solid #cbd5e1; background: white; color: #334155; font-weight: 500; font-size: 14px; border-radius: 4px; cursor: pointer; transition: all 0.2s; }
         .nav-btn-layout:hover:not(:disabled) { background: #0f172a; color: white; }
-        .repo-tab-btn { background: none; border: none; font-size: 15px; padding: 0 0 12px 0; cursor: pointer; transition: all 0.25s ease; }
-        .repo-tab-btn:hover { color: ${BRAND_YELLOWISH} !important; }
+        
+        /* Corporate Accordion Button - Clean Arrow format */
+        .visaka-accordion-btn { width: 100%; display: flex; justify-content: space-between; align-items: center; background: #0f2963; color: white; padding: 18px 24px; font-weight: 500; font-size: 16px; text-align: left; border: none; cursor: pointer; transition: background 0.2s; border-radius: 4px; }
+        .visaka-accordion-btn:hover { background: #15357a; }
       `}} />
 
       {/* ⚠️ NOTIFICATION / UNDER DEPLOYMENT BANNER */}
-      <div style={{
-        backgroundColor: '#fffbeb',
-        color: '#b45309',
-        padding: '12px 20px',
-        textAlign: 'center',
-        fontSize: '14px',
-        fontWeight: '500',
-        borderBottom: '1px solid #fde68a',
-        fontFamily: "'Inter', sans-serif",
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '8px'
-      }}>
+      <div style={{ backgroundColor: '#fffbeb', color: '#b45309', padding: '12px 20px', textAlign: 'center', fontSize: '14px', fontWeight: '500', borderBottom: '1px solid #fde68a', fontFamily: "'Inter', sans-serif", display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
         <span>⚠️</span>
         <span><strong>Notice:</strong> This website is currently under deployment phase. Some links or dashboard components may change during live setup synchronization.</span>
       </div>
 
       {/* 🎬 DYNAMIC BANNER BLOCK */}
-      <div style={{ 
-        width: '100%', 
-        height: '400px', 
-        position: 'relative', 
-        overflow: 'hidden',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        fontFamily: "'Inter', sans-serif",
-        backgroundColor: '#f1f5f9'
-      }}>
-        
-        <video 
-          autoPlay 
-          loop 
-          muted 
-          playsInline
-          style={{
-            position: 'absolute',
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            top: 0,
-            left: 0,
-            zIndex: 1
-          }}
-        >
+      <div style={{ width: '100%', height: '400px', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: "'Inter', sans-serif", backgroundColor: '#f1f5f9' }}>
+        <video autoPlay loop muted playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', top: 0, left: 0, zIndex: 1 }}>
           <source src={bannerVideo} type="video/mp4" />
           Your browser does not support the video tag.
         </video>
-
-        <div style={{
-          position: 'absolute',
-          top: 0, left: 0, width: '100%', height: '100%',
-          backgroundImage: 'linear-gradient(to bottom, rgba(15, 32, 67, 0.15) 0%, rgba(10, 20, 40, 0.25) 100%)',
-          zIndex: 2
-        }} />
-
-        <div style={{ 
-          position: 'relative', 
-          zIndex: 3, 
-          textAlign: 'center', 
-          color: '#ffffff', 
-          padding: '24px 40px', 
-          maxWidth: '850px',
-          backgroundColor: 'rgba(11, 22, 46, 0.45)', 
-          borderRadius: '12px',
-          backdropFilter: 'blur(8px)', 
-          border: '1px solid rgba(255, 255, 255, 0.12)'
-        }}>
-          <h1 style={{ fontSize: '44px', margin: '0 0 12px 0', fontWeight: '600', letterSpacing: '-0.5px', color: '#ffffff' }}>
-            Investor Relations
-          </h1>
+        <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', backgroundImage: 'linear-gradient(to bottom, rgba(15, 32, 67, 0.15) 0%, rgba(10, 20, 40, 0.25) 100%)', zIndex: 2 }} />
+        <div style={{ position: 'relative', zIndex: 3, textAlign: 'center', color: '#ffffff', padding: '24px 40px', maxWidth: '850px', backgroundColor: 'rgba(11, 22, 46, 0.45)', borderRadius: '12px', backdropFilter: 'blur(8px)', border: '1px solid rgba(255, 255, 255, 0.12)' }}>
+          <h1 style={{ fontSize: '44px', margin: '0 0 12px 0', fontWeight: '600', letterSpacing: '-0.5px', color: '#ffffff' }}>Investor Relations</h1>
           <p style={{ fontSize: '16px', color: '#f1f5f9', margin: '0 auto', fontWeight: '400', lineHeight: '1.6', letterSpacing: '0.1px' }}>
             Access quarterly compliance metrics, corporate filings, fiscal earnings reports, and shareholder resource provisions.
           </p>
@@ -292,85 +252,96 @@ const Investors = () => {
           </div>
         </div>
 
-        {/* DOCUMENTS REPOSITORY */}
+        {/* 📑 ORIGINAL SEBI LODR ACCORDION SECTION */}
         <div style={{ padding: '0 30px' }}>
-          <div style={{ backgroundColor: '#ffffff', padding: '15px 0px' }}>
-            
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #e2e8f0', paddingBottom: '20px', marginBottom: '35px' }}>
-              <h3 style={{ fontSize: '26px', color: '#000000', fontWeight: '400', margin: '0', letterSpacing: '-0.5px' }}>Quarterly Reports & Documents</h3>
-              
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                <span style={{ fontSize: '14px', color: '#666666' }}>Financial Year:</span>
-                <select 
-                  value={selectedYear} 
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid #000000', padding: '6px 20px 6px 0px', fontSize: '15px', color: '#000000', cursor: 'pointer', outline: 'none', background: 'transparent' }}
+          <h3 style={{ fontSize: '28px', color: '#000000', fontWeight: '400', marginBottom: '30px', letterSpacing: '-0.5px' }}>
+            LODR Statutory Disclosures & Reports
+          </h3>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+            {lodrSections.map((section, idx) => (
+              <div key={section.id} style={{ border: '1px solid #e2e8f0', borderRadius: '6px', overflow: 'hidden' }}>
+                
+                {/* Accordion Header Button with Elegant Arrow Indicator */}
+                <button 
+                  className="visaka-accordion-btn"
+                  onClick={() => handleAccordionToggle(idx, section.id)}
                 >
-                  <option value="All Years">All Years</option>
-                  {uniqueYears.map((year) => <option key={year} value={year}>{year}</option>)}
-                </select>
-              </div>
-            </div>
+                  <span>{section.title}</span>
+                  <span style={{ 
+                    fontSize: '14px', 
+                    transition: 'transform 0.25s ease', 
+                    transform: openSection === idx ? 'rotate(180deg)' : 'rotate(0deg)',
+                    display: 'inline-block' 
+                  }}>
+                    ▼
+                  </span>
+                </button>
 
-            {/* TAB BAR */}
-            <div style={{ display: 'flex', borderBottom: '1px solid #e0e0e0', marginBottom: '45px', gap: '30px' }}>
-              {['Earnings', 'Annual Reports', 'Shareholding', 'Governance'].map((tab) => {
-                const isSelected = activeTab === tab;
-                return (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className="repo-tab-btn"
-                    style={{
-                      fontWeight: isSelected ? '500' : '400',
-                      color: isSelected ? BRAND_YELLOWISH : '#777777',
-                      borderBottom: isSelected ? `2px solid ${BRAND_YELLOWISH}` : '2px solid transparent',
-                    }}
-                  >
-                    {tab}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* GRID SYSTEM */}
-            {loading ? (
-              <p style={{ color: '#666666', padding: '20px 0', fontSize: '15px' }}>Loading records safely from database...</p>
-            ) : filteredDocuments.length === 0 ? (
-              <div style={{ padding: '50px 30px', textAlign: 'center', backgroundColor: '#f8fafc', borderRadius: '6px' }}>
-                <h4 style={{ color: '#666666', margin: '0', fontSize: '16px', fontWeight: '400' }}>No Logs Found</h4>
-              </div>
-            ) : (
-              <>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(45%, 1fr))', columnGap: '60px', rowGap: '10px' }}>
-                  {currentItems.map((doc, idx) => {
-                    const title = doc["Document Title"] || doc["title"] || "Untitled Corporate Report";
-                    const year = doc["Financial Year"] || doc["Year"] || "Historical Record";
-                    const path = doc["File Path"] || doc["file_path"] || doc["PDF"] || "";
-
-                    return (
-                      <div key={idx} className="tcs-grid-item" onClick={() => handleOpenPdf(path, title)}>
-                        <div style={{ paddingRight: '20px' }}>
-                          <h4 style={{ margin: '0 0 8px 0', fontSize: '22px', color: '#000000', fontWeight: '300', lineHeight: '1.3', letterSpacing: '-0.2px', transition: 'color 0.2s ease' }}>
-                            {title}
-                          </h4>
-                          <span style={{ fontSize: '14px', color: '#777777', fontWeight: '400', display: 'block' }}>FY {year}</span>
-                        </div>
-                        <div className="tcs-grid-arrow">➔</div>
+                {/* Accordion Content Body */}
+                {openSection === idx && (
+                  <div style={{ padding: '30px', backgroundColor: '#ffffff' }}>
+                    
+                    {/* Header with Dynamic Financial Year Dropdown */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px', borderBottom: '1px solid #e2e8f0', paddingBottom: '15px', marginBottom: '25px' }}>
+                      <h4 style={{ margin: 0, fontSize: '18px', color: '#334155', fontWeight: '500' }}>
+                        Showing Records for {section.id}
+                      </h4>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <span style={{ fontSize: '14px', color: '#666666' }}>Filter by Year:</span>
+                        <select 
+                          value={selectedYear} 
+                          onChange={(e) => setSelectedYear(e.target.value)}
+                          style={{ border: 'none', borderBottom: '1px solid #000000', padding: '4px 15px 4px 0px', fontSize: '15px', color: '#000000', cursor: 'pointer', outline: 'none', background: 'transparent' }}
+                        >
+                          <option value="All Years">All Years</option>
+                          {uniqueYears.map((year) => <option key={year} value={year}>{year}</option>)}
+                        </select>
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
 
-                {/* PAGINATION */}
-                <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '20px', marginTop: '55px' }}>
-                  <button className="nav-btn-layout" onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1}>Previous</button>
-                  <span style={{ fontSize: '14px', fontWeight: '400', color: '#555555' }}>{currentPage} / {totalPages}</span>
-                  <button className="nav-btn-layout" onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>Next</button>
-                </div>
-              </>
-            )}
+                    {/* DYNAMIC GRID LOADING */}
+                    {loading ? (
+                      <p style={{ color: '#666666', padding: '10px 0', fontSize: '15px' }}>Loading records safely from database...</p>
+                    ) : filteredDocuments.length === 0 ? (
+                      <div style={{ padding: '40px 20px', textAlign: 'center', backgroundColor: '#f8fafc', borderRadius: '6px' }}>
+                        <h4 style={{ color: '#666666', margin: '0', fontSize: '15px', fontWeight: '400' }}>No Records Found under this Disclosure category for the selected year.</h4>
+                      </div>
+                    ) : (
+                      <>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(45%, 1fr))', columnGap: '60px', rowGap: '10px' }}>
+                          {currentItems.map((doc, docIdx) => {
+                            const title = doc["Document Title"] || doc["title"] || "Untitled Corporate Report";
+                            const year = doc["Financial Year"] || doc["Year"] || "Historical Record";
+                            const path = doc["File Path"] || doc["file_path"] || doc["PDF"] || "";
 
+                            return (
+                              <div key={docIdx} className="tcs-grid-item" onClick={() => handleOpenPdf(path, title)}>
+                                <div style={{ paddingRight: '20px' }}>
+                                  <h4 style={{ margin: '0 0 6px 0', fontSize: '18px', color: '#000000', fontWeight: '400', lineHeight: '1.4', transition: 'color 0.2s ease' }}>
+                                    📁 {title}
+                                  </h4>
+                                  <span style={{ fontSize: '13px', color: '#777777', fontWeight: '400', display: 'block', marginLeft: '22px' }}>Financial Year: FY {year}</span>
+                                </div>
+                                <div className="tcs-grid-arrow">➔</div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* PAGINATION INSIDE ACCORDION */}
+                        <div style={{ display: 'flex', justifyContent: 'flex-start', alignItems: 'center', gap: '20px', marginTop: '35px' }}>
+                          <button className="nav-btn-layout" onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} disabled={currentPage === 1}>Previous</button>
+                          <span style={{ fontSize: '14px', fontWeight: '400', color: '#555555' }}>{currentPage} / {totalPages}</span>
+                          <button className="nav-btn-layout" onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} disabled={currentPage === totalPages}>Next</button>
+                        </div>
+                      </>
+                    )}
+
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
