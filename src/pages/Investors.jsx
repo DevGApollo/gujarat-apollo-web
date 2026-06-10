@@ -106,12 +106,19 @@ const Investors = () => {
           return category === 'governance' && (title.includes('business') || title.includes('profile'));
         case 'Terms & Conditions':
           return category === 'governance' && (title.includes('appointment') || title.includes('director') || title.includes('familiarization'));
+        
+        // PERFECT FILTER FIX: Meeting, Outcome aur Intimation keywords ko board composition se block kiya
         case 'Composition of Board':
-          return category === 'governance' && (title.includes('composition') || title.includes('committee') || title.includes('board'));
+          return category === 'governance' && 
+                 (title.includes('composition') || title.includes('committee') || title.includes('board')) && 
+                 !title.includes('meeting') && 
+                 !title.includes('outcome') && 
+                 !title.includes('intimation');
+
         case 'Code of Conduct':
           return category === 'governance' && (title.includes('conduct') || title.includes('code') || title.includes('senior'));
         case 'Policies':
-          return category === 'governance' && (title.includes('policy') || title.includes('policies'));
+          return false; 
         case 'Grievance Redressal':
           return category === 'governance' && (title.includes('grievance') || title.includes('contact') || title.includes('redressal'));
         case 'Shareholding Pattern':
@@ -126,8 +133,12 @@ const Investors = () => {
           return title.includes('secretarial') || title.includes('compliance report');
         case 'Information Regulation 30':
           return title.includes('regulation 30') || title.includes('reg 30');
+        case 'Intimation of Board Meeting':
+          return title.includes('intimation') && title.includes('meeting');
+        case 'Outcome of Board Meeting':
+          return title.includes('outcome') && title.includes('meeting');
         case 'Other Board Meeting':
-          return title.includes('board meeting') || title.includes('bm notice');
+          return (title.includes('board meeting') || title.includes('bm notice')) && !title.includes('outcome') && !title.includes('intimation');
         case 'Unpaid Dividend':
           return title.includes('dividend') || title.includes('unpaid');
         case 'IEPF':
@@ -140,6 +151,8 @@ const Investors = () => {
           return category === 'annual reports' || title.includes('annual report');
         case 'Audited Financials':
           return title.includes('audited') || title.includes('subsidiary') || title.includes('standalone');
+        case 'Statements of Deviations':
+          return title.includes('deviation') || title.includes('variation');
         default:
           return false;
       }
@@ -147,6 +160,10 @@ const Investors = () => {
   };
 
   const renderDocumentList = (tabId) => {
+    if (tabId === 'Policies') {
+      return <div style={{ padding: '12px 20px', fontSize: '13.5px', color: '#64748b', textAlign: 'center', fontStyle: 'italic', background: '#f8fafc', border: '1px solid #cbd5e1', borderTop: 'none', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>🕒 Waiting for corporate update. Documents will be listed shortly.</div>;
+    }
+
     const list = getFilteredDocs(tabId);
     if (loading) return <div style={{ padding: '12px 20px', fontSize: '13.5px', color: '#64748b', textAlign: 'center', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>Loading files from AppSheet...</div>;
     if (list.length === 0) return <div style={{ padding: '12px 20px', fontSize: '13.5px', color: '#94a3b8', textAlign: 'center', fontStyle: 'italic', fontFamily: "'Plus Jakarta Sans', sans-serif" }}>No active documents found for this criteria.</div>;
@@ -300,7 +317,7 @@ const Investors = () => {
         .fin-content { flex: 1; padding: 25px; background: #ffffff; }
       `}} />
 
-      {/* 100% CLEAN VIDEO BANNER WITH NO OVERLAY TEXT AT ALL */}
+      {/* VIDEO BANNER CONTAINER */}
       <div style={{ width: '100%', height: '360px', position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', backgroundColor: '#0f2963' }}>
         <video autoPlay loop muted playsInline style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', top: 0, left: 0, zIndex: 1 }}>
           <source src={bannerVideo} type="video/mp4" />
@@ -311,7 +328,7 @@ const Investors = () => {
       {/* BODY CONTENT CONTAINER */}
       <div className="premium-animate-container" style={{ width: '100%', margin: '0 auto 60px auto', backgroundColor: '#ffffff', color: '#000000', paddingTop: '40px' }}>
         
-        {/* INVESTOR RELATIONS HEADER PERFECTLY CENTERED HERE */}
+        {/* INVESTOR RELATIONS HEADER */}
         <div style={{ padding: '0 80px', marginBottom: '40px', display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center' }}>
           <h1 className="premium-main-heading" style={{ fontSize: '36px', margin: '0 0 8px 0', fontWeight: '800', color: '#0f2963', letterSpacing: '-0.5px' }}>
             Investor Relations
@@ -460,10 +477,12 @@ const Investors = () => {
                         { id: 'Analysts Meet', title: 'Analysts / Investors Meet', icon: '🔗' },
                         { id: 'New Name Old Name', title: 'New Name and the Old Name of the Listed Entity for continuous period of one year, from the date of the last name change - NOT APPLICABLE', icon: '🔗' },
                         { id: 'Advertisements', title: 'Advertisements in Newspapers (47(1))', icon: '🔗' },
-                        { id: 'Credit Rating', title: 'Credit Rating Information', icon: '🔗' },
+                        { id: 'Credit Rating', title: 'Credit Rating Information - NIL', icon: '🔗' },
                         { id: 'Secretarial Compliance', title: 'Secretarial Compliance Report', icon: '🔗' },
                         { id: 'Information Regulation 30', title: 'Information under Regulation 30', icon: '🔗' },
-                        { id: 'Statements of Deviations', title: 'Statements of Deviation(s) or Variation(s) as specified in Regulation 32 - NIL', icon: '🔗' },
+                        { id: 'Intimation of Board Meeting', title: 'Intimation of Board Meeting', icon: '🔗' },
+                        { id: 'Outcome of Board Meeting', title: 'Outcome of Board Meeting', icon: '🔗' },
+                        { id: 'Statements of Deviations', title: 'Statements of Deviation(s) or Variation(s) as specified in Regulation 32', icon: '🔗' },
                         { id: 'Other Board Meeting', title: 'Other Board Meeting', icon: '🔗' }
                       ].map((sub) => (
                         <div key={sub.id}>
@@ -473,7 +492,7 @@ const Investors = () => {
                           >
                             <span className="v-sub-icon">{sub.icon}</span> {sub.title}
                           </button>
-                          {sub.id !== 'Details of Agreements' && sub.id !== 'New Name Old Name' && sub.id !== 'Statements of Deviations' && openSubSection === sub.id && renderDocumentList(sub.id)}
+                          {sub.id !== 'Details of Agreements' && sub.id !== 'New Name Old Name' && openSubSection === sub.id && renderDocumentList(sub.id)}
                         </div>
                       ))}
 
@@ -544,7 +563,7 @@ const Investors = () => {
                         { id: 'Statutory Forms', title: 'Statutory Forms' },
                         { id: 'Presentation', title: 'Investors Presentation' },
                         { id: 'Corporate Governance', title: 'Corporate Governance' },
-                        { id: 'MOEF', title: 'MOEF Compliance Reports' },
+                        { id: 'MOEF', title: 'MOEF Compliance Reports - NA' },
                         { id: 'Related Party', title: 'Disclosures on Related Party Transactions' }
                       ].map((otherTab) => (
                         <div key={otherTab.id}>
@@ -574,17 +593,14 @@ const Investors = () => {
 
                 {/* ================= CONTAINER BLOCK 3: CONTACT DETAILS ================= */}
                 <div>
-                  <button className="v-main-block-btn" onClick={() => toggleMainSection('contact_det')}>
-                    <span className="v-caret-icon" style={{ transform: openMainSection === 'contact_det' ? 'rotate(90deg)' : 'rotate(0deg)' }}>▶</span>
-                    Contact Details
+                  <button 
+                    className="v-main-block-btn" 
+                    onClick={() => window.location.href = '/contact'}
+                    style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                  >
+                    <span>▶ Contact Details</span>
+                    <span style={{ fontSize: '11px', background: 'rgba(255,255,255,0.15)', padding: '3px 8px', borderRadius: '4px', fontWeight: '500' }}>Go to Contact Page ➔</span>
                   </button>
-                  
-                  {openMainSection === 'contact_det' && (
-                    <div style={{ padding: '20px 25px', background: '#ffffff', border: '1px solid #cbd5e1', borderTop: 'none', fontSize: '13.5px', color: '#444444', lineHeight: '1.7' }}>
-                      <p style={{ margin: '0 0 6px 0' }}><strong>Compliance Officer:</strong> Secretarial Department</p>
-                      <p style={{ margin: '0' }}><strong>Email Address:</strong> investor@gujaratapollo.com</p>
-                    </div>
-                  )}
                 </div>
 
               </div>
